@@ -1,0 +1,71 @@
+# Execution begins at address 0 
+    .pos 0
+    irmovq stack, %rsp      # Set up stack pointer
+    call main       # Execute main program
+    halt            # Terminate program 
+
+# Array of 10 elements
+    .align 8
+array:  
+    .quad 0x00000000000A
+    .quad 0x000000000009
+    .quad 0x000000000008
+    .quad 0x000000000007
+    .quad 0x000000000006
+    .quad 0x000000000005
+    .quad 0x000000000004
+    .quad 0x000000000003
+    .quad 0x000000000002
+    .quad 0x000000000001
+    
+# move commands:
+#    i: immediate value
+#    r: register
+#    m: memory 
+#    format: XXmovq where X's are i, r, or m
+
+main:   
+    irmovq array,%rdi
+    irmovq $10,%rsi
+    call sort        #go to bubble sort
+    ret
+
+sort:
+    irmovq $1, %r14 #creates a boolean varaible and assigns it to one sorted variable
+    rrmovq %rsi, %r13 #copy the length of the array to a new register to restrict the loop to a certain amount of iterations
+    rrmovq %rdi, %r12 #temp variable to hold the current location in a array as we sort through
+    isubq $1, %r13 #variable is now length - 1 = 9
+    loop:
+        rrmovq %r12, %r11 #copying array location variable
+        iaddq $8, %r11 #array location to compare
+        mrmovq (%r11), %r9 #moving memory value to r9 for temp compare
+        mrmovq (%r12), %r10 #another temp variable for register subtract
+        subq %r9, %r10 #take the difference of the two location values
+        jg swap 
+    end_of_loop:
+        iaddq $8, %r12 #increment array pointer
+        isubq $1, %r13 #decrement loop variable
+        jne loop
+    isubq $1, %r14
+    jl sort #checks if sorted varaible is true or false 
+        
+        
+        
+    
+
+    
+    
+    
+swap:
+    mrmovq (%r11), %rax # go to location pointed at by r11
+                       # move that value into rax
+    mrmovq (%r12), %rcx # same but for r12
+    rmmovq %rcx, (%r11) # move contents of rcx into address pointed at by r11
+    rmmovq %rax, (%r12)
+    irmovq $0, %r14 #set sorted variable back to false
+    jmp end_of_loop
+
+    .pos 0x200
+stack:
+
+    
