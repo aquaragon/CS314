@@ -1,0 +1,8 @@
+6-2a
+
+Load and multiply cannot be parrel because multiply requires the computation from the load
+
+6-2b
+
+Due to multipying being the slowest latency and not being able to be parallelized, for every element there will be a latency of 5 cycles
+
