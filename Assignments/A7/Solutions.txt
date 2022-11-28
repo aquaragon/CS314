@@ -1,0 +1,7 @@
+2.a)
+
+With a column major indexing we would see a 1/4 (2/8) miss-hit ratio becuase for each iteration of the inner loop we are accessing a new column of the array that is not in the cache because the cache is a row major. With every load of the array we get two indexes that are adjacent in row (becuase array is row major) ex. points[0][0] and points[0][1] are loaded into the cache intially. We would get a cold miss for loading in the array element then 3 hits for the rest of the values in the struct. Repeating we would see 1 miss to 3 hits because with every inner loop iteration we would see a new column we are accessing that is not in the cache.
+
+2.b)
+
+Row major indexing we would see a 1/8 miss-hit ratio because with every index into the array we load the adjacent row's element aswell. This means that we would see a miss on the load in and 7 hits after that because we would have the rest of the current struct in the cache along with the next struct which is what we will be looking for in the next loop iteration. 
