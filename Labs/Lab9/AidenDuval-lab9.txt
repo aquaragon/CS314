@@ -1,0 +1,148 @@
+Consider a 32B 2-way set associative cache with 2 sets and 8B blocks for 
+an 8-bit architecture (i.e., 256 bytes of memory). Use the Least Recently
+Used (LRU) eviction policy if evictions are necessary. For each of the 
+following addresses, show the tag, set, offset, whether it resulted in hit
+or miss, and the state of all valid lines in the cache following the access.
+
+Direct mapped - one line per set
+Direct mapped in 8 bits you'd have:
+tag set offset
+xxx xx  xxx
+
+But, in this case: 2-way
+tag  set offset
+xxxx x   xxx
+
+A. 0x02 -----------------------
+tag  set offset
+0000 0   010
+
+cold miss
+
+cache contents:
+set v tag  data
+0   1 0000 M[0-7]
+
+B. 0x24 -----------------------
+tag  set offset
+0010 0   100
+
+cold miss
+
+cache contents:
+set v tag  data
+0   1 0000 M[0-7]
+0   1 0010 M[32-39] (0010 0000 through 0010 0111)
+
+C. 0x07 -----------------------
+tag  set offset
+0000 0   111
+
+hit
+
+cache contents:
+set v tag  data
+0   1 0000 M[0-7]
+0   1 0010 M[32-39]
+
+D. 0x04 -----------------------
+tag  set offset
+0000 0   100
+
+hit
+
+cache contents:
+set v tag  data
+0   1 0000 M[0-7]
+0   1 0010 M[32-39]
+
+E. 0x2A -----------------------
+tag  set offset
+0010 1   010
+
+cold miss
+
+cache contents:
+set v tag  data
+0   1 0000 M[0-7]
+0   1 0010 M[32-39]
+1   1 0010 M[40-47]  (0010 1000 through 0010 1111)
+
+F. 0x09 -----------------------
+
+tag  set offset
+0000 1   001
+
+cold miss
+
+cache contents:
+set v tag  data
+0   1 0000 M[0-7]
+0   1 0010 M[32-39]
+1   1 0010 M[40-47]
+1   1 0000 M[8-15]  
+
+G. 0x34 -----------------------
+
+tag  set offset
+0011 0   100
+
+conflict miss
+
+LRU line: 0    1 0010 M[32-39], evict
+
+cache contents:
+set v tag  data
+0   1 0000 M[0-7]
+0   1 0011 M[48-55]
+1   1 0010 M[40-47]
+1   1 0000 M[8-15]
+
+think of as matrix:
+  0    1
+0 0000 0011
+1 0010 0000
+
+Consider a 128B 4-way set associative cache with 16B blocks for an 
+8-bit architecture (i.e., 256 bytes of memory). Use the Least Recently Used 
+(LRU) eviction policy if evictions are necessary. For each of the following 
+addresses, show the tag, set, offset, whether it resulted in hit or miss, 
+and the state of all valid lines in the cache following the access.
+
+matrix is row
+ 0 1 2 3
+0
+1
+
+4-way set associate w/ 16B blocks
+
+
+tag set offset
+xx  xx  xxxx  
+
+A. 0x00 -----------------------
+
+tag set offset
+00  00  0000
+
+cache contens:
+set v tag  data
+0   1 00   M[0-15]
+
+B. 0x46 -----------------------
+
+tag set offset
+01  00  0110
+
+cache contens:
+set v tag  data
+0   1 00   M[0-15]
+0   1 01   M[64-79]
+
+
+C. 0x06 -----------------------
+
+0x40
+0x12
+0x0c
+0x00
